@@ -1,0 +1,33 @@
+dev_dependencies:
+  flutter_flavorizr: ^2.2.3
+
+flavorizr:
+  app:
+    name: "My App"
+
+  flavors:
+    dev:
+      app:
+        name: "App Dev"
+      android:
+        applicationId: "com.shaimaa.app.dev"
+      ios:
+        bundleId: "com.shaimaa.app.dev"
+      firebase:
+        config: "lib/firebase/google-services-dev.json"
+
+    staging:
+      app:
+        name: "App Staging"
+      android:
+        applicationId: "com.shaimaa.app.stg"
+      ios:
+        bundleId: "com.shaimaa.app.stg"
+
+    prod:
+      app:
+        name: "App Real"
+      android:
+        applicationId: "com.shaimaa.app"
+      ios:
+        bundleId: "com.shaimaa.app"

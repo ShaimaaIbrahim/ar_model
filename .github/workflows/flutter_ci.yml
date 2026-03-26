@@ -1,0 +1,66 @@
+name: Flutter Senior CI/CD 2026
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_and_test:
+    # استخدام أحدث نسخة مستقرة من خوادم GitHub (Ubuntu 24.04 أو أحدث)
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        # تأكدي من وضع النسخ التي يستخدمها مشروعك فعلياً
+        flutter_version: [3.35.6]
+
+    steps:
+      # 1. سحب الكود (النسخة الرابعة هي الأحدث والأكثر أماناً حالياً)
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. التخزين المؤقت المطور (v4) لسرعة خيالية في الـ Build
+      - name: Cache Flutter dependencies (V4)
+        uses: actions/cache@v4
+        with:
+          path: |
+            /opt/hostedtoolcache/flutter
+            ~/.pub-cache
+          # المفتاح هنا يعتمد على نظام التشغيل، نسخة فلاتر، وملف الـ pubspec
+          key: ${{ runner.os }}-flutter-${{ matrix.flutter_version }}-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-${{ matrix.flutter_version }}-
+
+      # 3. إعداد فلاتر (الإصدار v2 مستقر جداً ويدعم كل ميزات 2026)
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.flutter_version }}
+          cache: true # ميزة مدمجة في هذا الـ Action لزيادة السرعة
+
+      # 4. المهام التقنية
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Static Analysis
+        run: flutter analyze
+
+      - name: Static Analysis Check
+        run: flutter analyze --fatal-infos --fatal-warnings
+
+      - name: Architecture Rules Check
+        run: dart run custom_lint
+
+      - name: Verify Formatting
+        run: dart format --output=none --set-exit-if-changed .
+#      - name: Unit Testing
+#        run: flutter test
+
+      # 5. البناء باستخدام الـ Secrets بشكل احترافي
+      - name: Build Android APK
+        run: |
+          flutter build apk --release \
+          --dart-define=API_KEY=${{ secrets.MY_APP_API_KEY }} \
+          --dart-define=BASE_URL=${{ secrets.APP_BASE_URL }}

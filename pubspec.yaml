@@ -40,9 +40,17 @@ dependencies:
   vector_math: ^2.2.0
   ar_flutter_plugin_flash: ^1.1.6
 
+  flutter_flavorizr: ^2.4.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  very_good_analysis: ^5.1.0
+  custom_lint: ^0.5.0
+      # هنا تضيفين حزمة الـ custom rules التي كتبناها سابقاً
+  my_custom_lint_rules:
+       path: ./packages/my_custom_lint_rules
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
