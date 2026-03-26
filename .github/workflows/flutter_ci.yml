@@ -47,6 +47,14 @@ jobs:
       - name: Static Analysis
         run: flutter analyze
 
+      - name: Static Analysis Check
+        run: flutter analyze --fatal-infos --fatal-warnings
+
+      - name: Architecture Rules Check
+        run: dart run custom_lint
+
+      - name: Verify Formatting
+        run: dart format --output=none --set-exit-if-changed .
 #      - name: Unit Testing
 #        run: flutter test
 
